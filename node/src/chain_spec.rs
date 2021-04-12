@@ -7,6 +7,10 @@ use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::AuthorityId as GrandpaId;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use sc_service::{ChainType, Properties};
+use node_template_runtime::{
+    opaque::SessionKeys, OctopusAppchainConfig, SessionConfig,
+};
+use pallet_octopus_appchain::crypto::AuthorityId as OctopusId;
 
 // The URL for the telemetry server.
 // const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
@@ -30,13 +34,27 @@ pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-/// Generate an Aura authority key.
-pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
-	(
-		get_from_seed::<AuraId>(s),
-		get_from_seed::<GrandpaId>(s),
-	)
+/// Generate ocw, validator, session key and weight from seed.
+pub fn authority_keys_from_seed(s: &str) -> (AccountId, AuraId, GrandpaId, OctopusId, u64) {
+    (
+        get_account_id_from_seed::<sr25519::Public>(s),
+        get_from_seed::<AuraId>(s),
+        get_from_seed::<GrandpaId>(s),
+        get_from_seed::<OctopusId>(s),
+        100,
+    )
 }
+
+fn session_keys(
+    aura: AuraId,
+    grandpa: GrandpaId,
+    octopus: OctopusId,
+)
+    -> SessionKeys 
+{
+    SessionKeys { aura, grandpa, octopus }
+}
+
 
 pub fn development_config() -> Result<ChainSpec, String> {
 	let wasm_binary = WASM_BINARY.ok_or_else(|| "Development wasm binary not available".to_string())?;
@@ -136,7 +154,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 /// Configure initial storage state for FRAME modules.
 fn testnet_genesis(
 	wasm_binary: &[u8],
-	initial_authorities: Vec<(AuraId, GrandpaId)>,
+	initial_authorities: Vec<(AccountId, AuraId, GrandpaId, OctopusId, u64)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
@@ -152,14 +170,28 @@ fn testnet_genesis(
 			balances: endowed_accounts.iter().cloned().map(|k|(k, 1 << 60)).collect(),
 		}),
 		pallet_aura: Some(AuraConfig {
-			authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
+			//authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
+                        authorities: vec![],
 		}),
 		pallet_grandpa: Some(GrandpaConfig {
-			authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
+		        //authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
+                        authorities: vec![],
 		}),
 		pallet_sudo: Some(SudoConfig {
 			// Assign network admin rights.
 			key: root_key,
 		}),
+                pallet_session: Some(SessionConfig {
+                    keys: initial_authorities.iter().map(|x| {
+                        (x.0.clone(), x.0.clone(), session_keys(
+                                x.1.clone(),
+                                x.2.clone(),
+                                x.3.clone(),
+                        ))
+                    }).collect::<Vec<_>>(),
+                }),
+                pallet_octopus_appchain: Some(OctopusAppchainConfig {
+                    validators: initial_authorities.iter().map(|x| (x.0.clone(), x.4)).collect(),
+                }),
 	}
 }

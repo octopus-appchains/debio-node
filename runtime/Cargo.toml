@@ -33,6 +33,10 @@ escrow = { path = '../pallets/escrow', default-features = false }
 specimen = { path = '../pallets/specimen', default-features = false }
 rbac = { path = '../pallets/rbac', default-features = false }
 
+# octopus network dependencies
+pallet-session = { default-features = false, version = '3.0.0' }
+pallet-octopus-appchain = { default-features = false, git = 'https://github.com/octopus-network/pallet-octopus-appchain.git' }
+
 # Substrate dependencies
 frame-benchmarking = { default-features = false, optional = true, version = '3.0.0' }
 frame-executive = { default-features = false, version = '3.0.0' }
@@ -103,5 +107,7 @@ std = [
     'services/std',
     'orders/std',
     'escrow/std',
-   'specimen/std',
+    'specimen/std',
+    'pallet-session/std',
+    'pallet-octopus-appchain/std',
 ]

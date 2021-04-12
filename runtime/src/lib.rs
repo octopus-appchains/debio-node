@@ -38,6 +38,15 @@ pub use frame_support::{
 	},
 };
 use pallet_transaction_payment::CurrencyAdapter;
+use sp_core::Encode;
+use sp_runtime::generic::Era;
+use sp_runtime::traits::{
+	ConvertInto, Extrinsic as ExtrinsicT, OpaqueKeys, SaturatedConversion, StaticLookup,
+};
+pub use frame_support::debug;
+
+/// The payload being signed in transactions.
+pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
 /// Import the template pallet.
 pub use pallet_template;
@@ -94,6 +103,7 @@ pub mod opaque {
 		pub struct SessionKeys {
 			pub aura: Aura,
 			pub grandpa: Grandpa,
+                        pub octopus: OctopusAppchain,
 		}
 	}
 }
@@ -270,6 +280,50 @@ impl pallet_template::Config for Runtime {
 	type Event = Event;
 }
 
+// ------------------------------
+// Octopus Network Dependencies
+// ------------------------------
+parameter_types! {
+	pub const Period: u32 = 10;
+	pub const Offset: u32 = 10;
+	pub const DisabledValidatorsThreshold: Perbill = Perbill::from_percent(17);
+}
+
+impl pallet_session::Config for Runtime {
+	type Event = Event;
+	type ValidatorId = <Self as frame_system::Config>::AccountId;
+	type ValidatorIdOf = ConvertInto;
+	type ShouldEndSession = pallet_session::PeriodicSessions<Period, Offset>;
+	type NextSessionRotation = pallet_session::PeriodicSessions<Period, Offset>;
+	type SessionManager = OctopusAppchain;
+	type SessionHandler = <opaque::SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
+	type Keys = opaque::SessionKeys;
+	type DisabledValidatorsThreshold = DisabledValidatorsThreshold;
+	type WeightInfo = pallet_session::weights::SubstrateWeight<Runtime>;
+}
+
+parameter_types! {
+    pub const AppchainId: pallet_octopus_appchain::ChainId = 0; // TODO: Change to correct ChainId
+    pub const Motherchain: pallet_octopus_appchain::MotherchainType = pallet_octopus_appchain::MotherchainType::NEAR;
+    pub const GracePeriod: u32 = 5;
+    pub const UnsignedPriority: u64 = 1 << 20;
+}
+
+impl pallet_octopus_appchain::Config for Runtime {
+    type Event = Event;
+    type AppCrypto = OctopusAppCrypto;
+    type Call = Call;
+    type AppchainId = AppchainId;
+    type Motherchain = Motherchain;
+    const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1616239154529-4812993"; // TODO: Change to correct RELAY_CONTRACT_NAME
+    type GracePeriod = GracePeriod;
+    type UnsignedPriority = UnsignedPriority;
+}
+
+
+// ------------------------------
+// Debio Pallets
+// ------------------------------
 impl labs::Config for Runtime {
     type Event = Event;
     type Currency = Balances;
@@ -321,7 +375,9 @@ construct_runtime!(
 		Grandpa: pallet_grandpa::{Module, Call, Storage, Config, Event},
 		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
+                Session: pallet_session::{Module, Call, Storage, Event, Config<T>},
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
+
 		// Include the custom logic from the template pallet in the runtime.
 		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 		Labs: labs::{Module, Call, Storage, Event<T>},
@@ -330,8 +386,11 @@ construct_runtime!(
                 Orders: orders::{Module, Call, Storage, Event<T>},
                 Escrow: escrow::{Module, Call, Storage, Event<T>},
                 Specimen: specimen::{Module, Call, Storage, Event<T>},
+                RBAC: rbac::{Module, Call, Storage, Event<T>},
                 */
-                //RBAC: rbac::{Module, Call, Storage, Event<T>},
+                
+                // Include Octopus pallet
+                OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
 	}
 );
 
@@ -368,6 +427,67 @@ pub type Executive = frame_executive::Executive<
 	Runtime,
 	AllModules,
 >;
+
+pub struct OctopusAppCrypto;
+
+impl frame_system::offchain::AppCrypto<<Signature as Verify>::Signer, Signature> for OctopusAppCrypto {
+    type RuntimeAppPublic = pallet_octopus_appchain::crypto::AuthorityId;
+    type GenericSignature = sp_core::sr25519::Signature;
+    type GenericPublic = sp_core::sr25519::Public;
+}
+
+impl frame_system::offchain::SigningTypes for Runtime {
+    type Public = <Signature as Verify>::Signer;
+    type Signature = Signature;
+}
+
+impl<LocalCall> frame_system::offchain::SendTransactionTypes<LocalCall> for Runtime
+    where
+        Call: From<LocalCall>,
+{
+    type Extrinsic = UncheckedExtrinsic;
+    type OverarchingCall = Call;
+}
+
+impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
+    where
+        Call: From<LocalCall>,
+{
+    fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
+        call: Call,
+        public: <Signature as Verify>::Signer,
+        account: AccountId,
+        nonce: Index,
+    )
+        -> Option<(Call, <UncheckedExtrinsic as ExtrinsicT>::SignaturePayload)>
+    {
+        let tip = 0;
+        let period = 1 << 8;
+        let current_block = System::block_number().saturated_into::<u64>();
+        let era = Era::mortal(period, current_block);
+        let extra = (
+            frame_system::CheckSpecVersion::<Runtime>::new(),
+            frame_system::CheckTxVersion::<Runtime>::new(),
+            frame_system::CheckGenesis::<Runtime>::new(),
+            frame_system::CheckEra::<Runtime>::from(era),
+            frame_system::CheckNonce::<Runtime>::from(nonce),
+            frame_system::CheckWeight::<Runtime>::new(),
+            pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+        );
+        let raw_payload = SignedPayload::new(call, extra)
+            .map_err(|e| {
+                debug::warn!("Unable to create signed payload: {:?}", e);
+            })
+            .ok()?;
+        let signature = raw_payload
+            .using_encoded(|payload| {
+                C::sign(payload, public)
+            })?;
+        let address = <Self as frame_system::Config>::Lookup::unlookup(account);
+        let (call, extra, _) = raw_payload.deconstruct();
+        Some((call, (address, signature.into(), extra)))
+    }
+}
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
