@@ -303,7 +303,7 @@ impl pallet_session::Config for Runtime {
 }
 
 parameter_types! {
-    pub const AppchainId: pallet_octopus_appchain::ChainId = 0; // TODO: Change to correct ChainId
+    pub const AppchainId: pallet_octopus_appchain::ChainId = 12; 
     pub const Motherchain: pallet_octopus_appchain::MotherchainType = pallet_octopus_appchain::MotherchainType::NEAR;
     pub const GracePeriod: u32 = 5;
     pub const UnsignedPriority: u64 = 1 << 20;
@@ -315,7 +315,7 @@ impl pallet_octopus_appchain::Config for Runtime {
     type Call = Call;
     type AppchainId = AppchainId;
     type Motherchain = Motherchain;
-    const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1616239154529-4812993"; // TODO: Change to correct RELAY_CONTRACT_NAME
+    const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1617804936284-2114003";
     type GracePeriod = GracePeriod;
     type UnsignedPriority = UnsignedPriority;
 }
