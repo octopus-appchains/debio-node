@@ -1554,6 +1554,24 @@ dependencies = [
 
 [[package]]
 name = "frame-benchmarking"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "linregress",
+ "parity-scale-codec",
+ "paste 1.0.5",
+ "sp-api",
+ "sp-io",
+ "sp-runtime",
+ "sp-runtime-interface",
+ "sp-std",
+ "sp-storage",
+]
+
+[[package]]
+name = "frame-benchmarking"
 version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70fe99487f84579a3f2c4ba52650fec875492eea41be0e4eea8019187f105052"
@@ -1562,7 +1580,7 @@ dependencies = [
  "frame-system",
  "linregress",
  "parity-scale-codec",
- "paste",
+ "paste 1.0.5",
  "sp-api",
  "sp-io",
  "sp-runtime",
@@ -1634,7 +1652,7 @@ dependencies = [
  "log",
  "once_cell",
  "parity-scale-codec",
- "paste",
+ "paste 1.0.5",
  "serde",
  "smallvec 1.6.1",
  "sp-arithmetic",
@@ -3655,7 +3673,7 @@ dependencies = [
 name = "node-template-runtime"
 version = "3.0.0"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 3.1.0",
  "frame-executive",
  "frame-support",
  "frame-system",
@@ -4293,9 +4311,28 @@ dependencies = [
 
 [[package]]
 name = "paste"
+version = "0.1.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45ca20c77d80be666aef2b45486da86238fabe33e38306bd3118fe4af33fa880"
+dependencies = [
+ "paste-impl",
+ "proc-macro-hack",
+]
+
+[[package]]
+name = "paste"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acbf547ad0c65e31259204bd90935776d1c693cec2f4ff7abb7a1bbbd40dfe58"
+
+[[package]]
+name = "paste-impl"
+version = "0.1.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d95a7db200b97ef370c8e6de0088252f7e0dfff7d047a28528e47456c0fc98b6"
+dependencies = [
+ "proc-macro-hack",
+]
 
 [[package]]
 name = "pbkdf2"
@@ -6331,7 +6368,7 @@ dependencies = [
  "approx 0.4.0",
  "num-complex 0.3.1",
  "num-traits",
- "paste",
+ "paste 1.0.5",
 ]
 
 [[package]]
@@ -6801,7 +6838,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parity-util-mem",
- "paste",
+ "paste 1.0.5",
  "rand 0.7.3",
  "serde",
  "sp-application-crypto",
@@ -8554,309 +8591,309 @@ dependencies = [
 [[patch.unused]]
 name = "frame-support-test"
 version = "2.0.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-assets"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-atomic-swap"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-authority-discovery"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-babe"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-bounties"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-collective"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-contracts"
 version = "2.0.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-contracts-rpc"
 version = "0.8.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-contracts-rpc-runtime-api"
 version = "0.8.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-democracy"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-elections"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-example"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-example-offchain-worker"
 version = "2.0.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-example-parallel"
 version = "2.0.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-identity"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-im-online"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-indices"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-lottery"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-membership"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-mmr"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-mmr-primitives"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-multisig"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-nicks"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-node-authorization"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-offences"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-proxy"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-recovery"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-scheduler"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-scored-pool"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-session-benchmarking"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-society"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-staking"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-staking-fuzz"
 version = "0.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-staking-reward-curve"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-tips"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-treasury"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-utility"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "pallet-vesting"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-authority-discovery"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-consensus-babe-rpc"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-consensus-manual-seal"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-consensus-pow"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-finality-grandpa-warp-sync"
 version = "0.8.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-network-test"
 version = "0.8.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-runtime-test"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-service-test"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sc-sync-state-rpc"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-api-test"
 version = "2.0.1"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-application-crypto-test"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-arithmetic-fuzzer"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-authority-discovery"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-consensus-pow"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-election-providers"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-npos-elections"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-npos-elections-compact"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-npos-elections-fuzzer"
 version = "2.0.0-alpha.5"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-runtime-interface-test"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-runtime-interface-test-wasm"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-runtime-interface-test-wasm-deprecated"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-sandbox"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-test-primitives"
 version = "2.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"

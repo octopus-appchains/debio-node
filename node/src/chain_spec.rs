@@ -205,23 +205,20 @@ fn testnet_genesis(
 			// Assign network admin rights.
 			key: root_key,
 		}),
-<<<<<<< HEAD
-                pallet_session: Some(SessionConfig {
-                    keys: initial_authorities.iter().map(|x| {
-                        (x.0.clone(), x.0.clone(), session_keys(
-                                x.1.clone(),
-                                x.2.clone(),
-                                x.3.clone(),
-                        ))
-                    }).collect::<Vec<_>>(),
-                }),
-                pallet_octopus_appchain: Some(OctopusAppchainConfig {
-                    validators: initial_authorities.iter().map(|x| (x.0.clone(), x.4)).collect(),
-                }),
-=======
-                orders: Some(OrdersConfig {
-                    escrow_key: orders_escrow_key,
-                })
->>>>>>> development
+		pallet_session: Some(SessionConfig {
+			keys: initial_authorities.iter().map(|x| {
+				(x.0.clone(), x.0.clone(), session_keys(
+						x.1.clone(),
+						x.2.clone(),
+						x.3.clone(),
+				))
+			}).collect::<Vec<_>>(),
+		}),
+		pallet_octopus_appchain: Some(OctopusAppchainConfig {
+			validators: initial_authorities.iter().map(|x| (x.0.clone(), x.4)).collect(),
+		}),
+		orders: Some(OrdersConfig {
+			escrow_key: orders_escrow_key,
+		})
 	}
 }
