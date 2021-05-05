@@ -297,7 +297,7 @@ impl pallet_session::Config for Runtime {
 }
 
 parameter_types! {
-    pub const AppchainId: pallet_octopus_appchain::ChainId = 12; 
+    pub const AppchainId: pallet_octopus_appchain::ChainId = 10; 
     pub const Motherchain: pallet_octopus_appchain::MotherchainType = pallet_octopus_appchain::MotherchainType::NEAR;
     pub const GracePeriod: u32 = 5;
     pub const UnsignedPriority: u64 = 1 << 20;
@@ -309,7 +309,7 @@ impl pallet_octopus_appchain::Config for Runtime {
     type Call = Call;
     type AppchainId = AppchainId;
     type Motherchain = Motherchain;
-    const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1617804936284-2114003";
+    const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1618284355026-5339538";
     type GracePeriod = GracePeriod;
     type UnsignedPriority = UnsignedPriority;
 }
@@ -359,16 +359,16 @@ construct_runtime!(
 		Grandpa: pallet_grandpa::{Module, Call, Storage, Config, Event},
 		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
-                Session: pallet_session::{Module, Call, Storage, Event, Config<T>},
+		Session: pallet_session::{Module, Call, Storage, Event, Config<T>},
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 
 		// Include the custom logic from the template pallet in the runtime.
 		Labs: labs::{Module, Call, Storage, Event<T>},
-		OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
 		Services: services::{Module, Call, Storage, Event<T>},
 		Orders: orders::{Module, Call, Storage, Config<T>, Event<T>},
 	    GeneticTesting: genetic_testing::{Module, Call, Storage, Event<T>},
         UserProfile: user_profile::{Module, Call, Storage, Event<T>},
+		OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
 	}
 );
 

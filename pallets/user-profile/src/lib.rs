@@ -5,10 +5,6 @@
 /// https://substrate.dev/docs/en/knowledgebase/runtime/frame
 pub use pallet::*;
 
-#[cfg(test)]
-mod mock;
-#[cfg(test)]
-mod tests;
 
 pub mod interface;
 pub use crate::interface::UserProfileInterface;
