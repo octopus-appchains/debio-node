@@ -1,14 +1,8 @@
 [package]
-name = "escrow"
+name = "user-profile"
 version = "0.1.0"
-authors = ["kevin <kevin.janada@gmail.com>"]
+authors = ["Kevin <kevin.janada@gmail.com>"]
 edition = "2018"
-description = ''
-homepage = ''
-license = 'Unlicense'
-repository = ''
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
@@ -23,14 +17,11 @@ version = '2.0.0'
 [dependencies]
 frame-support = { default-features = false, version = '3.0.0' }
 frame-system = { default-features = false, version = '3.0.0' }
-pallet-timestamp = { default-features = false, version = '3.0.0' }
 sp-std = { default-features = false, version = '3.0.0' }
-services = { path = '../services', default-features = false }
-#escrow-controller = { path = '../../traits/escrow-controller', default-features = false }
-chrono = { default-features = false, version = '0.4' }
+serde = { version = "1.0.119" }
+rustc-hex = { version = "2.1.0", default-features = false }
 
 [dev-dependencies]
-serde = { version = "1.0.119" }
 sp-core = { default-features = false, version = '3.0.0' }
 sp-io = { default-features = false, version = '3.0.0' }
 sp-runtime = { default-features = false, version = '3.0.0' }
@@ -42,7 +33,6 @@ std = [
     'frame-support/std',
     'frame-system/std',
     'sp-std/std',
-    'pallet-timestamp/std',
-    'services/std',
-    'chrono/std',
+    'serde/std',
+    'rustc-hex/std',
 ]

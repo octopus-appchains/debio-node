@@ -49,13 +49,11 @@ pub use frame_support::debug;
 pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
 /// Import the template pallet.
-pub use pallet_template;
 pub use labs;
 pub use services;
 pub use orders;
-pub use escrow;
-pub use specimen;
-pub use rbac;
+pub use genetic_testing;
+pub use user_profile;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -275,10 +273,6 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
-/// Configure the template pallet in pallets/template.
-impl pallet_template::Config for Runtime {
-	type Event = Event;
-}
 
 // ------------------------------
 // Octopus Network Dependencies
@@ -336,30 +330,20 @@ impl services::Config for Runtime {
     type ServiceOwner = Labs;
 }
 
-/*
 impl orders::Config for Runtime {
     type Event = Event;
-    // type Hashing = BlakeTwo256;
+    type Services = Services;
+    type GeneticTesting = GeneticTesting;
+}
+
+impl genetic_testing::Config for Runtime {
+    type Event = Event;
     type RandomnessSource = RandomnessCollectiveFlip;
 }
 
-
-impl escrow::Config for Runtime {
-    type Event = Event;
-    type Currency = Balances;
-    //type Controller = Orders;
-}
-
-impl specimen::Config for Runtime {
+impl user_profile::Config for Runtime {
     type Event = Event;
 }
-*/
-
-/*
-impl rbac::Config for Runtime {
-    type Event = Event;
-}
-*/
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
@@ -379,18 +363,12 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 
 		// Include the custom logic from the template pallet in the runtime.
-		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 		Labs: labs::{Module, Call, Storage, Event<T>},
-                Services: services::{Module, Call, Storage, Event<T>},
-                /*
-                Orders: orders::{Module, Call, Storage, Event<T>},
-                Escrow: escrow::{Module, Call, Storage, Event<T>},
-                Specimen: specimen::{Module, Call, Storage, Event<T>},
-                RBAC: rbac::{Module, Call, Storage, Event<T>},
-                */
-                
-                // Include Octopus pallet
-                OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
+		OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
+		Services: services::{Module, Call, Storage, Event<T>},
+		Orders: orders::{Module, Call, Storage, Config<T>, Event<T>},
+	    GeneticTesting: genetic_testing::{Module, Call, Storage, Event<T>},
+        UserProfile: user_profile::{Module, Call, Storage, Event<T>},
 	}
 );
 

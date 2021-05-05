@@ -25,13 +25,11 @@ hex-literal = { optional = true, version = '0.3.1' }
 serde = { features = ['derive'], optional = true, version = '1.0.119' }
 
 # local dependencies
-pallet-template = { path = '../pallets/template', default-features = false, version = '3.0.0' }
 labs = { path = '../pallets/labs', default-features = false }
 services = { path = '../pallets/services', default-features = false }
 orders = { path = '../pallets/orders', default-features = false }
-escrow = { path = '../pallets/escrow', default-features = false }
-specimen = { path = '../pallets/specimen', default-features = false }
-rbac = { path = '../pallets/rbac', default-features = false }
+genetic-testing = { path = '../pallets/genetic-testing', default-features = false }
+user-profile = { path = '../pallets/user-profile', default-features = false }
 
 # octopus network dependencies
 pallet-session = { default-features = false, version = '3.0.0' }
@@ -88,7 +86,6 @@ std = [
     'pallet-grandpa/std',
     'pallet-randomness-collective-flip/std',
     'pallet-sudo/std',
-    'pallet-template/std',
     'pallet-timestamp/std',
     'pallet-transaction-payment/std',
     'pallet-transaction-payment-rpc-runtime-api/std',
@@ -106,8 +103,8 @@ std = [
     'labs/std',
     'services/std',
     'orders/std',
-    'escrow/std',
-    'specimen/std',
     'pallet-session/std',
     'pallet-octopus-appchain/std',
+    'genetic-testing/std',
+    'user-profile/std',
 ]
