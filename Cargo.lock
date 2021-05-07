@@ -784,6 +784,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-merkle-mountain-range"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e486fe53bb9f2ca0f58cb60e8679a5354fd6687a839942ef0a75967250289ca6"
+dependencies = [
+ "cfg-if 0.1.10",
+]
+
+[[package]]
 name = "clang-sys"
 version = "0.29.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1190,28 +1199,39 @@ dependencies = [
  "hex-literal 0.2.1",
  "jsonrpc-core",
  "node-template-runtime",
+ "pallet-im-online",
  "pallet-octopus-appchain",
+ "pallet-staking",
  "pallet-transaction-payment-rpc",
  "sc-basic-authorship",
+ "sc-chain-spec",
  "sc-cli",
  "sc-client-api",
  "sc-consensus",
- "sc-consensus-aura",
+ "sc-consensus-babe",
+ "sc-consensus-babe-rpc",
+ "sc-consensus-epochs",
+ "sc-consensus-slots",
  "sc-executor",
  "sc-finality-grandpa",
+ "sc-finality-grandpa-rpc",
  "sc-keystore",
+ "sc-network",
  "sc-rpc",
  "sc-rpc-api",
  "sc-service",
+ "sc-sync-state-rpc",
+ "sc-telemetry",
  "sc-transaction-pool",
  "sp-api",
  "sp-block-builder",
  "sp-blockchain",
  "sp-consensus",
- "sp-consensus-aura",
+ "sp-consensus-babe",
  "sp-core",
  "sp-finality-grandpa",
  "sp-inherents",
+ "sp-keystore",
  "sp-runtime",
  "sp-transaction-pool",
  "structopt",
@@ -3683,12 +3703,18 @@ dependencies = [
  "hex-literal 0.3.1",
  "labs",
  "orders",
- "pallet-aura",
+ "pallet-assets",
+ "pallet-authorship",
+ "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",
+ "pallet-im-online",
+ "pallet-mmr",
  "pallet-octopus-appchain",
  "pallet-randomness-collective-flip",
  "pallet-session",
+ "pallet-staking",
+ "pallet-staking-reward-curve",
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
@@ -3698,12 +3724,13 @@ dependencies = [
  "services",
  "sp-api",
  "sp-block-builder",
- "sp-consensus-aura",
+ "sp-consensus-babe",
  "sp-core",
  "sp-inherents",
  "sp-offchain",
  "sp-runtime",
  "sp-session",
+ "sp-staking",
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
@@ -3888,21 +3915,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-aura"
+name = "pallet-assets"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 dependencies = [
+ "frame-benchmarking 3.0.0",
  "frame-support",
  "frame-system",
- "pallet-session",
- "pallet-timestamp",
  "parity-scale-codec",
  "serde",
- "sp-application-crypto",
- "sp-consensus-aura",
  "sp-runtime",
  "sp-std",
- "sp-timestamp",
 ]
 
 [[package]]
@@ -3918,6 +3941,31 @@ dependencies = [
  "sp-inherents",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-babe"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "frame-benchmarking 3.0.0",
+ "frame-support",
+ "frame-system",
+ "pallet-authorship",
+ "pallet-session",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "serde",
+ "sp-application-crypto",
+ "sp-consensus-babe",
+ "sp-consensus-vrf",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-session",
+ "sp-staking",
+ "sp-std",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -3952,6 +4000,57 @@ dependencies = [
  "sp-runtime",
  "sp-session",
  "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-im-online"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-authorship",
+ "parity-scale-codec",
+ "serde",
+ "sp-application-crypto",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-mmr"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "ckb-merkle-mountain-range",
+ "frame-benchmarking 3.0.0",
+ "frame-support",
+ "frame-system",
+ "pallet-mmr-primitives",
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-mmr-primitives"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "serde",
+ "sp-api",
+ "sp-core",
+ "sp-runtime",
  "sp-std",
 ]
 
@@ -4005,6 +4104,37 @@ dependencies = [
  "sp-staking",
  "sp-std",
  "sp-trie",
+]
+
+[[package]]
+name = "pallet-staking"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-authorship",
+ "pallet-session",
+ "parity-scale-codec",
+ "serde",
+ "sp-application-crypto",
+ "sp-io",
+ "sp-npos-elections",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+ "static_assertions",
+]
+
+[[package]]
+name = "pallet-staking-reward-curve"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -5381,38 +5511,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sc-consensus-aura"
-version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
-dependencies = [
- "derive_more",
- "futures 0.3.14",
- "futures-timer 3.0.2",
- "log",
- "parity-scale-codec",
- "parking_lot 0.11.1",
- "sc-block-builder",
- "sc-client-api",
- "sc-consensus-slots",
- "sc-telemetry",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-aura",
- "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
- "sp-timestamp",
- "sp-version",
- "substrate-prometheus-endpoint",
-]
-
-[[package]]
 name = "sc-consensus-babe"
 version = "0.9.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
@@ -5456,6 +5554,30 @@ dependencies = [
  "sp-utils",
  "sp-version",
  "substrate-prometheus-endpoint",
+]
+
+[[package]]
+name = "sc-consensus-babe-rpc"
+version = "0.9.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "derive_more",
+ "futures 0.3.14",
+ "jsonrpc-core",
+ "jsonrpc-core-client",
+ "jsonrpc-derive",
+ "sc-consensus-babe",
+ "sc-consensus-epochs",
+ "sc-rpc-api",
+ "serde",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-keystore",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -5625,6 +5747,31 @@ dependencies = [
  "sp-runtime",
  "sp-utils",
  "substrate-prometheus-endpoint",
+]
+
+[[package]]
+name = "sc-finality-grandpa-rpc"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "145cb4dfafa73269565857c43e204d71f6334c7f1260b783bb5942a6a4e77831"
+dependencies = [
+ "derive_more",
+ "finality-grandpa",
+ "futures 0.3.14",
+ "jsonrpc-core",
+ "jsonrpc-core-client",
+ "jsonrpc-derive",
+ "jsonrpc-pubsub",
+ "log",
+ "parity-scale-codec",
+ "sc-client-api",
+ "sc-finality-grandpa",
+ "sc-rpc",
+ "serde",
+ "serde_json",
+ "sp-blockchain",
+ "sp-core",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -5953,6 +6100,26 @@ dependencies = [
  "parking_lot 0.11.1",
  "sc-client-api",
  "sp-core",
+ "thiserror",
+]
+
+[[package]]
+name = "sc-sync-state-rpc"
+version = "0.9.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "jsonrpc-core",
+ "jsonrpc-core-client",
+ "jsonrpc-derive",
+ "sc-chain-spec",
+ "sc-client-api",
+ "sc-consensus-babe",
+ "sc-consensus-epochs",
+ "sc-finality-grandpa",
+ "sc-rpc-api",
+ "serde_json",
+ "sp-blockchain",
+ "sp-runtime",
  "thiserror",
 ]
 
@@ -6490,7 +6657,7 @@ dependencies = [
 [[package]]
 name = "sp-application-crypto"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 dependencies = [
  "parity-scale-codec",
  "serde",
@@ -6586,21 +6753,6 @@ dependencies = [
  "substrate-prometheus-endpoint",
  "thiserror",
  "wasm-timer",
-]
-
-[[package]]
-name = "sp-consensus-aura"
-version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
-dependencies = [
- "parity-scale-codec",
- "sp-api",
- "sp-application-crypto",
- "sp-consensus-slots",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
 ]
 
 [[package]]
@@ -6798,6 +6950,30 @@ dependencies = [
  "serde",
  "sp-core",
  "sp-externalities",
+]
+
+[[package]]
+name = "sp-npos-elections"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "parity-scale-codec",
+ "serde",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-npos-elections-compact",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-npos-elections-compact"
+version = "3.0.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -8594,22 +8770,17 @@ version = "2.0.1"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "pallet-assets"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
 name = "pallet-atomic-swap"
 version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "pallet-authority-discovery"
+name = "pallet-aura"
 version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
 
 [[patch.unused]]
-name = "pallet-babe"
+name = "pallet-authority-discovery"
 version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
@@ -8669,11 +8840,6 @@ version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "pallet-im-online"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
 name = "pallet-indices"
 version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
@@ -8685,16 +8851,6 @@ source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#61
 
 [[patch.unused]]
 name = "pallet-membership"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
-name = "pallet-mmr"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
-name = "pallet-mmr-primitives"
 version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
@@ -8749,18 +8905,8 @@ version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "pallet-staking"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
 name = "pallet-staking-fuzz"
 version = "0.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
-name = "pallet-staking-reward-curve"
-version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
@@ -8789,9 +8935,9 @@ version = "0.9.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "sc-consensus-babe-rpc"
+name = "sc-consensus-aura"
 version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
 
 [[patch.unused]]
 name = "sc-consensus-manual-seal"
@@ -8824,11 +8970,6 @@ version = "2.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
-name = "sc-sync-state-rpc"
-version = "0.9.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
 name = "sp-api-test"
 version = "2.0.1"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
@@ -8849,22 +8990,17 @@ version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
+name = "sp-consensus-aura"
+version = "0.9.0"
+source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6a6560dc7259d9b198939ae326111fe70ef18232"
+
+[[patch.unused]]
 name = "sp-consensus-pow"
 version = "0.9.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 
 [[patch.unused]]
 name = "sp-election-providers"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
-name = "sp-npos-elections"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
-
-[[patch.unused]]
-name = "sp-npos-elections-compact"
 version = "3.0.0"
 source = "git+https://github.com/octopus-network/substrate.git?branch=octopus#6189dee66b73dbaa93953732b25717a0271ae72e"
 

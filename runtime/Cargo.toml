@@ -31,10 +31,6 @@ orders = { path = '../pallets/orders', default-features = false }
 genetic-testing = { path = '../pallets/genetic-testing', default-features = false }
 user-profile = { path = '../pallets/user-profile', default-features = false }
 
-# octopus network dependencies
-pallet-session = { default-features = false, version = '3.0.0' }
-pallet-octopus-appchain = { default-features = false, git = 'https://github.com/octopus-network/pallet-octopus-appchain.git' }
-
 # Substrate dependencies
 frame-benchmarking = { default-features = false, optional = true, version = '3.0.0' }
 frame-executive = { default-features = false, version = '3.0.0' }
@@ -42,7 +38,7 @@ frame-support = { default-features = false, version = '3.0.0' }
 frame-system = { default-features = false, version = '3.0.0' }
 frame-system-benchmarking = { default-features = false, optional = true, version = '3.0.0' }
 frame-system-rpc-runtime-api = { default-features = false, version = '3.0.0' }
-pallet-aura = { default-features = false, version = '3.0.0' }
+pallet-babe = { default-features = false, version = '3.0.0' }
 pallet-balances = { default-features = false, version = '3.0.0' }
 pallet-grandpa = { default-features = false, version = '3.0.0' }
 pallet-randomness-collective-flip = { default-features = false, version = '3.0.0' }
@@ -52,7 +48,7 @@ pallet-transaction-payment = { default-features = false, version = '3.0.0' }
 pallet-transaction-payment-rpc-runtime-api = { default-features = false, version = '3.0.0' }
 sp-api = { default-features = false, version = '3.0.0' }
 sp-block-builder = { default-features = false, version = '3.0.0' }
-sp-consensus-aura = { default-features = false, version = '0.9.0' }
+sp-consensus-babe = { default-features = false, version = '0.9.0' }
 sp-core = { default-features = false, version = '3.0.0' }
 sp-inherents = { default-features = false, version = '3.0.0' }
 sp-offchain = { default-features = false, version = '3.0.0' }
@@ -61,6 +57,18 @@ sp-session = { default-features = false, version = '3.0.0' }
 sp-std = { default-features = false, version = '3.0.0' }
 sp-transaction-pool = { default-features = false, version = '3.0.0' }
 sp-version = { default-features = false, version = '3.0.0' }
+
+pallet-assets = { default-features = false, version = '3.0.0' }
+pallet-authorship = { default-features = false, version = '3.0.0' }
+pallet-im-online = { default-features = false, version = '3.0.0' }
+pallet-mmr = { default-features = false, version = '3.0.0' }
+pallet-session = { default-features = false, version = '3.0.0' }
+pallet-staking = { default-features = false, version = '3.0.0' }
+pallet-staking-reward-curve = { default-features = false, version = '3.0.0' }
+sp-staking = { default-features = false, version = '3.0.0' }
+
+# octopus network dependencies
+pallet-octopus-appchain = { default-features = false, git = 'https://github.com/octopus-network/pallet-octopus-appchain.git' }
 
 [features]
 default = ['std']
@@ -81,7 +89,7 @@ std = [
     'frame-support/std',
     'frame-system/std',
     'frame-system-rpc-runtime-api/std',
-    'pallet-aura/std',
+    'pallet-babe/std',
     'pallet-balances/std',
     'pallet-grandpa/std',
     'pallet-randomness-collective-flip/std',
@@ -89,9 +97,11 @@ std = [
     'pallet-timestamp/std',
     'pallet-transaction-payment/std',
     'pallet-transaction-payment-rpc-runtime-api/std',
+    'pallet-authorship/std',
+    'pallet-im-online/std',
     'sp-api/std',
     'sp-block-builder/std',
-    'sp-consensus-aura/std',
+    'sp-consensus-babe/std',
     'sp-core/std',
     'sp-inherents/std',
     'sp-offchain/std',
@@ -100,11 +110,17 @@ std = [
     'sp-std/std',
     'sp-transaction-pool/std',
     'sp-version/std',
+    'pallet-assets/std',
+    'pallet-authorship/std',
+    'pallet-im-online/std',
+    'pallet-mmr/std',
+    'pallet-session/std',
+    'pallet-staking/std',
+    'sp-staking/std',
     'labs/std',
     'services/std',
     'orders/std',
-    'pallet-session/std',
-    'pallet-octopus-appchain/std',
     'genetic-testing/std',
     'user-profile/std',
+    'pallet-octopus-appchain/std',
 ]

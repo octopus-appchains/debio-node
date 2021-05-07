@@ -1,15 +1,19 @@
 use sp_core::{Pair, Public, sr25519};
 use node_template_runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
+	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, SystemConfig, WASM_BINARY, Signature, OrdersConfig,
+	ImOnlineConfig, SessionConfig, opaque::SessionKeys,
+	StakingConfig, Balance, DOLLARS, OctopusAppchainConfig,
 };
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::AuthorityId as GrandpaId;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use sc_service::{ChainType, Properties};
-use node_template_runtime::{
-    opaque::SessionKeys, OctopusAppchainConfig, SessionConfig,
-};
+
+use sp_consensus_babe::{AuthorityId as BabeId};
+use pallet_im_online::sr25519::{AuthorityId as ImOnlineId};
+
+use pallet_staking::StakerStatus;
+use sp_runtime::Perbill;
 use pallet_octopus_appchain::crypto::AuthorityId as OctopusId;
 
 use hex_literal::hex;
@@ -19,6 +23,17 @@ use hex_literal::hex;
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
+
+fn session_keys(
+   	babe: BabeId,
+    grandpa: GrandpaId,
+	im_online: ImOnlineId,
+    octopus: OctopusId,
+)
+    -> SessionKeys 
+{
+    SessionKeys { babe, grandpa, im_online, octopus }
+}
 
 /// Generate a crypto pair from seed.
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -37,25 +52,17 @@ pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 }
 
 /// Generate ocw, validator, session key and weight from seed.
-pub fn authority_keys_from_seed(s: &str) -> (AccountId, AuraId, GrandpaId, OctopusId, u64) {
+pub fn authority_keys_from_seed(s: &str) -> (AccountId, BabeId, GrandpaId, ImOnlineId, OctopusId, u64) {
     (
         get_account_id_from_seed::<sr25519::Public>(s),
-        get_from_seed::<AuraId>(s),
-        get_from_seed::<GrandpaId>(s),
-        get_from_seed::<OctopusId>(s),
+        get_from_seed::<BabeId>(s),
+		get_from_seed::<GrandpaId>(s),
+		get_from_seed::<ImOnlineId>(s),
+		get_from_seed::<OctopusId>(s),
         100,
     )
 }
 
-fn session_keys(
-    aura: AuraId,
-    grandpa: GrandpaId,
-    octopus: OctopusId,
-)
-    -> SessionKeys 
-{
-    SessionKeys { aura, grandpa, octopus }
-}
 
 
 pub fn development_config() -> Result<ChainSpec, String> {
@@ -177,12 +184,14 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 /// Configure initial storage state for FRAME modules.
 fn testnet_genesis(
 	wasm_binary: &[u8],
-	initial_authorities: Vec<(AccountId, AuraId, GrandpaId, OctopusId, u64)>,
+	initial_authorities: Vec<(AccountId, BabeId, GrandpaId, ImOnlineId, OctopusId, u64)>,
 	root_key: AccountId,
-        orders_escrow_key: AccountId,
+	orders_escrow_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
 ) -> GenesisConfig {
+	const ENDOWMENT: Balance = 10_000_000 * DOLLARS;
+	const STASH: Balance = ENDOWMENT / 1000;
 	GenesisConfig {
 		frame_system: Some(SystemConfig {
 			// Add Wasm runtime to storage.
@@ -190,16 +199,13 @@ fn testnet_genesis(
 			changes_trie_config: Default::default(),
 		}),
 		pallet_balances: Some(BalancesConfig {
-			// Configure endowed accounts with initial balance of 1 << 60.
-			balances: endowed_accounts.iter().cloned().map(|k|(k, 1 << 60)).collect(),
+			balances: endowed_accounts.iter().cloned().map(|k|(k, ENDOWMENT)).collect(),
 		}),
-		pallet_aura: Some(AuraConfig {
-			//authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
-                        authorities: vec![],
+		pallet_babe: Some(BabeConfig {
+			authorities: vec![],
 		}),
 		pallet_grandpa: Some(GrandpaConfig {
-		        //authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
-                        authorities: vec![],
+			authorities: vec![],
 		}),
 		pallet_sudo: Some(SudoConfig {
 			// Assign network admin rights.
@@ -211,11 +217,25 @@ fn testnet_genesis(
 						x.1.clone(),
 						x.2.clone(),
 						x.3.clone(),
+						x.4.clone(),
 				))
 			}).collect::<Vec<_>>(),
 		}),
+		pallet_staking: Some(StakingConfig {
+			validator_count: initial_authorities.len() as u32 * 2,
+			minimum_validator_count: initial_authorities.len() as u32,
+			stakers: initial_authorities.iter().map(|x| {
+				(x.0.clone(), x.0.clone(), STASH, StakerStatus::Validator)
+			}).collect(),
+			invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
+			slash_reward_fraction: Perbill::from_percent(10),
+			.. Default::default()
+		}),
+		pallet_im_online: Some(ImOnlineConfig {
+			keys: vec![],
+		}),
 		pallet_octopus_appchain: Some(OctopusAppchainConfig {
-			validators: initial_authorities.iter().map(|x| (x.0.clone(), x.4)).collect(),
+			validators: initial_authorities.iter().map(|x| (x.0.clone(), x.5)).collect(),
 		}),
 		orders: Some(OrdersConfig {
 			escrow_key: orders_escrow_key,

@@ -169,4 +169,4 @@ sp-transaction-pool = { git = 'https://github.com/octopus-network/substrate.git'
 sp-trie = { git = 'https://github.com/octopus-network/substrate.git', branch = 'octopus' }
 sp-utils = { git = 'https://github.com/octopus-network/substrate.git', branch = 'octopus' }
 sp-version = { git = 'https://github.com/octopus-network/substrate.git', branch = 'octopus' }
-sp-wasm-interface = { git = 'https://github.com/octopus-network/substrate.git', branch = 'octopus' }
+sp-wasm-interface = { git = 'https://github.com/octopus-network/substrate.git', branch = 'octopus' } 
