@@ -37,7 +37,6 @@ use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use sp_runtime::transaction_validity::TransactionPriority;
 use frame_support::debug;
 use sp_runtime::generic::Era;
-use sp_core::Encode;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -54,6 +53,8 @@ pub use frame_support::{
 	},
 };
 use pallet_transaction_payment::CurrencyAdapter;
+use codec::{Encode, Decode};
+use sp_core::{RuntimeDebug};
 
 
 /// An index to a block.
@@ -84,6 +85,9 @@ pub type Hash = sp_core::H256;
 
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
+
+#[derive(Clone, Copy, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug)]
+pub struct EthereumAddress([u8; 20]);
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -588,6 +592,8 @@ impl labs::Config for Runtime {
     type Event = Event;
     type Currency = Balances;
     type Services = Services;
+	type EthereumAddress = EthereumAddress;
+	type UserProfile = UserProfile;
 }
 
 impl services::Config for Runtime {
@@ -600,6 +606,8 @@ impl orders::Config for Runtime {
     type Event = Event;
     type Services = Services;
     type GeneticTesting = GeneticTesting;
+	type EthereumAddress = EthereumAddress;
+	type UserProfile = UserProfile;
 }
 
 impl genetic_testing::Config for Runtime {
@@ -609,6 +617,7 @@ impl genetic_testing::Config for Runtime {
 
 impl user_profile::Config for Runtime {
     type Event = Event;
+	type EthereumAddress = EthereumAddress;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
