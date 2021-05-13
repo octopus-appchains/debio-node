@@ -568,7 +568,7 @@ impl frame_system::offchain::AppCrypto<<Signature as Verify>::Signer, Signature>
 }
 
 parameter_types! {
-	pub const AppchainId: pallet_octopus_appchain::ChainId = 10;
+	pub const AppchainId: pallet_octopus_appchain::ChainId = 10; // TODO: Change this
 	pub const Motherchain: pallet_octopus_appchain::MotherchainType = pallet_octopus_appchain::MotherchainType::NEAR;
 	pub const GracePeriod: u32 = 5;
 	pub const UnsignedPriority: u64 = 1 << 20;
@@ -580,7 +580,7 @@ impl pallet_octopus_appchain::Config for Runtime {
 	type Call = Call;
 	type AppchainId = AppchainId;
 	type Motherchain = Motherchain;
-	const RELAY_CONTRACT_NAME: &'static [u8] = b"dev-1618284355026-5339538";
+	const RELAY_CONTRACT_NAME: &'static [u8] = b"oct-relay.testnet";
 	type GracePeriod = GracePeriod;
 	type UnsignedPriority = UnsignedPriority;
 }
