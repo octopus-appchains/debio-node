@@ -18,6 +18,7 @@ pub use frame_support::traits::Randomness;
 pub use sp_std::prelude::*;
 pub use sp_std::fmt::Debug;
 pub use traits_genetic_testing::{GeneticTestingProvider, DnaSampleTracking};
+pub use traits_order::{OrderEventEmitter};
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -27,6 +28,7 @@ pub mod pallet {
     pub trait Config: frame_system::Config + pallet_timestamp::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
         type RandomnessSource: Randomness<Self::Hash>;
+        type Orders: OrderEventEmitter<Self>;
     }
 
     // ----- This is template code, every pallet needs this ---
@@ -42,13 +44,13 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// parameters [DnaSample]
-        DnaSampleCreated(DnaSample<T::AccountId>),
+        DnaSampleCreated(DnaSampleOf<T>),
         /// Received
-        DnaSampleReceived(DnaSample<T::AccountId>),
+        DnaSampleReceived(DnaSampleOf<T>),
         /// Rejected
-        DnaSampleRejected(DnaSample<T::AccountId>),
+        DnaSampleRejected(DnaSampleOf<T>),
         /// Processing
-        DnaSampleProcessing(DnaSample<T::AccountId>),
+        DnaSampleProcessing(DnaSampleOf<T>),
         /// Dna Sample Processed
         DnaSampleProcessed(DnaTestResultOf<T>),
         /// Dna Test Result Submitted
@@ -66,8 +68,9 @@ pub mod pallet {
 
     pub type HashOf<T> = <T as frame_system::Config>::Hash;
     pub type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
-    pub type DnaSampleOf<T> = DnaSample<AccountIdOf<T>>;
-    pub type DnaTestResultOf<T> = DnaTestResult<AccountIdOf<T>>;
+    pub type MomentOf<T> = <T as pallet_timestamp::Config>::Moment;
+    pub type DnaSampleOf<T> = DnaSample<AccountIdOf<T>, HashOf<T>, MomentOf<T>>;
+    pub type DnaTestResultOf<T> = DnaTestResult<AccountIdOf<T>, HashOf<T>, MomentOf<T>>;
     pub type DnaSampleTrackingId = Vec<u8>;
 
 
@@ -199,23 +202,29 @@ impl Default for DnaSampleStatus {
 }
 
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug, PartialEq, Eq)]
-pub struct DnaSample<AccountId> {
+pub struct DnaSample<AccountId, Hash, Moment> {
     tracking_id: Vec<u8>,
     lab_id: AccountId,
     owner_id: AccountId,
     status: DnaSampleStatus,
+    order_id: Hash,
+    created_at: Moment,
+    updated_at: Moment,
 }
-impl<AccountId> DnaSample<AccountId> {
-    pub fn new(tracking_id: Vec<u8>, lab_id: AccountId, owner_id: AccountId) -> Self {
+impl<AccountId, Hash, Moment: Copy> DnaSample<AccountId, Hash, Moment> {
+    pub fn new(tracking_id: Vec<u8>, lab_id: AccountId, owner_id: AccountId, order_id: Hash, created_at: Moment) -> Self {
         Self {
             tracking_id,
             lab_id,
             owner_id,
             status: DnaSampleStatus::default(),
+            order_id,
+            created_at: created_at,
+            updated_at: created_at,
         }
     }
 }
-impl<AccountId> DnaSampleTracking for DnaSample<AccountId> {
+impl<AccountId, Hash, Moment> DnaSampleTracking for DnaSample<AccountId, Hash, Moment> {
     fn get_tracking_id(&self) -> &Vec<u8> {
         &self.tracking_id
     }
@@ -231,20 +240,25 @@ impl<AccountId> DnaSampleTracking for DnaSample<AccountId> {
 }
 
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug, PartialEq, Eq)]
-pub struct DnaTestResult<AccountId> {
+pub struct DnaTestResult<AccountId, Hash, Moment> {
     tracking_id: Vec<u8>,
     lab_id: Option<AccountId>, // if lab_id == None, Test result is submitted independently
     owner_id: AccountId,
     comments: Option<Vec<u8>>,
     result_link: Option<Vec<u8>>,
     report_link: Option<Vec<u8>>,
+    order_id: Option<Hash>,
+    created_at: Moment,
+    updated_at: Moment,
 }
-impl<AccountId> DnaTestResult<AccountId> {
+impl<AccountId, Hash, Moment: Copy> DnaTestResult<AccountId, Hash, Moment> {
     pub fn new(
         tracking_id: Vec<u8>,
         lab_id: Option<AccountId>,
         owner_id: AccountId,
         submission: DnaTestResultSubmission,
+        order_id: Option<Hash>,
+        created_at: Moment,
     )
         -> Self
     {
@@ -255,6 +269,9 @@ impl<AccountId> DnaTestResult<AccountId> {
             comments: submission.comments,
             result_link: submission.result_link,
             report_link: submission.report_link,
+            order_id,
+            created_at,
+            updated_at: created_at,
         }
     }
 }
@@ -270,19 +287,26 @@ pub struct DnaTestResultSubmission {
 
 impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
     type DnaSample = DnaSampleOf<T>;
-    type DnaTestResult = DnaTestResult<T::AccountId>;
+    type DnaTestResult = DnaTestResultOf<T>;
     type DnaTestResultSubmission = DnaTestResultSubmission;
     type Error = Error<T>;
 
-    fn create_dna_sample(lab_id: &T::AccountId, owner_id: &T::AccountId) -> Result<Self::DnaSample, Self::Error> {
+    fn create_dna_sample(lab_id: &T::AccountId, owner_id: &T::AccountId, order_id: &HashOf<T>) -> Result<Self::DnaSample, Self::Error> {
         let seed = Self::generate_random_seed(lab_id, owner_id);
 
         let mut tries = 10;
         loop {
             let tracking_id = tracking_id_generator::generate(seed.clone());
+            let now = pallet_timestamp::Pallet::<T>::get();
 
             if !DnaSamples::<T>::contains_key(&tracking_id) {
-                let dna_sample = DnaSample::new(tracking_id.clone(), lab_id.clone(), owner_id.clone());
+                let dna_sample = DnaSample::new(
+                    tracking_id.clone(),
+                    lab_id.clone(),
+                    owner_id.clone(),
+                    order_id.clone(),
+                    now,
+                );
                 DnaSamples::<T>::insert(&dna_sample.tracking_id, &dna_sample);
                 Self::add_dna_sample_by_owner(&dna_sample);
                 Self::add_dna_sample_by_lab(&dna_sample);
@@ -319,7 +343,10 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
             return Err(Error::<T>::Unauthorized)
         }
 
+        let now = pallet_timestamp::Pallet::<T>::get();
         dna_sample.status = DnaSampleStatus::Received;
+        dna_sample.updated_at = now;
+
         DnaSamples::<T>::insert(tracking_id, &dna_sample);
 
         Ok(dna_sample)
@@ -336,8 +363,11 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
             return Err(Error::<T>::Unauthorized)
         }
 
+        let now = pallet_timestamp::Pallet::<T>::get();
         dna_sample.status = DnaSampleStatus::Rejected;
+        dna_sample.updated_at = now;
         DnaSamples::<T>::insert(tracking_id, &dna_sample);
+        T::Orders::emit_event_order_failed(&dna_sample.order_id);
 
         Ok(dna_sample)
     }
@@ -353,7 +383,9 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
             return Err(Error::<T>::Unauthorized)
         }
 
+        let now = pallet_timestamp::Pallet::<T>::get();
         dna_sample.status = DnaSampleStatus::Processing;
+        dna_sample.updated_at = now;
         DnaSamples::<T>::insert(tracking_id, &dna_sample);
 
         Ok(dna_sample)
@@ -382,6 +414,8 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
             true => dna_sample.status = DnaSampleStatus::Success,
             false => dna_sample.status = DnaSampleStatus::Failed,
         }
+        let now = pallet_timestamp::Pallet::<T>::get();
+        dna_sample.updated_at = now;
         DnaSamples::<T>::insert(tracking_id, &dna_sample);
 
         // Create DnaTestResult
@@ -390,6 +424,8 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
             Some(lab_id.clone()), // Lab
             dna_sample.owner_id.clone(), // Owner
             submission.clone(),
+            Some(dna_sample.order_id.clone()),
+            now,
         );
         DnaTestResults::<T>::insert(tracking_id, &dna_test_result);
         Self::add_dna_test_results_by_lab(&dna_test_result);
@@ -413,13 +449,16 @@ impl<T: Config> GeneticTestingInterface<T> for Pallet<T> {
         let mut tries = 10;
         loop {
             let tracking_id = tracking_id_generator::generate(seed.clone());
+            let now = pallet_timestamp::Pallet::<T>::get();
 
             if !DnaTestResults::<T>::contains_key(&tracking_id) {
                 let dna_test_result = DnaTestResult::new(
                     tracking_id.clone(),
-                    None,
+                    None, // Lab
                     owner_id.clone(),
                     submission.clone(),
+                    None, // order_id
+                    now,
                 );
                 DnaTestResults::<T>::insert(&tracking_id, &dna_test_result);
                 Self::add_dna_test_results_by_owner(&dna_test_result);
@@ -467,8 +506,8 @@ impl<T: Config> GeneticTestingProvider<T> for Pallet<T> {
     type DnaSample = DnaSampleOf<T>;
     type Error = Error<T>;
 
-    fn create_dna_sample(lab_id: &T::AccountId, owner_id: &T::AccountId) -> Result<Self::DnaSample, Self::Error> {
-        <Self as GeneticTestingInterface<T>>::create_dna_sample(lab_id, owner_id)
+    fn create_dna_sample(lab_id: &T::AccountId, owner_id: &T::AccountId, order_id: &HashOf<T>) -> Result<Self::DnaSample, Self::Error> {
+        <Self as GeneticTestingInterface<T>>::create_dna_sample(lab_id, owner_id, order_id)
     }
     fn dna_sample_by_tracking_id(tracking_id: &Vec<u8>) -> Option<Self::DnaSample> {
         <Self as GeneticTestingInterface<T>>::dna_sample_by_tracking_id(tracking_id)

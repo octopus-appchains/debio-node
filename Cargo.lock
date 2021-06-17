@@ -3930,6 +3930,7 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "traits-genetic-testing",
+ "traits-order",
  "traits-services",
  "traits-user-profile",
 ]
@@ -7952,6 +7953,16 @@ dependencies = [
 
 [[package]]
 name = "traits-genetic-testing"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-std",
+]
+
+[[package]]
+name = "traits-order"
 version = "0.1.0"
 dependencies = [
  "frame-support",
