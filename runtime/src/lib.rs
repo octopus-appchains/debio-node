@@ -592,8 +592,8 @@ impl labs::Config for Runtime {
     type Event = Event;
     type Currency = Balances;
     type Services = Services;
-	type EthereumAddress = EthereumAddress;
-	type UserProfile = UserProfile;
+    type EthereumAddress = EthereumAddress;
+    type UserProfile = UserProfile;
 }
 
 impl services::Config for Runtime {
@@ -606,18 +606,19 @@ impl orders::Config for Runtime {
     type Event = Event;
     type Services = Services;
     type GeneticTesting = GeneticTesting;
-	type EthereumAddress = EthereumAddress;
-	type UserProfile = UserProfile;
+    type EthereumAddress = EthereumAddress;
+    type UserProfile = UserProfile;
 }
 
 impl genetic_testing::Config for Runtime {
     type Event = Event;
+    type Orders = Orders;
     type RandomnessSource = RandomnessCollectiveFlip;
 }
 
 impl user_profile::Config for Runtime {
     type Event = Event;
-	type EthereumAddress = EthereumAddress;
+    type EthereumAddress = EthereumAddress;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -646,8 +647,8 @@ construct_runtime!(
 		Labs: labs::{Module, Call, Storage, Event<T>},
 		Services: services::{Module, Call, Storage, Event<T>},
 		Orders: orders::{Module, Call, Storage, Config<T>, Event<T>},
-	    GeneticTesting: genetic_testing::{Module, Call, Storage, Event<T>},
-        UserProfile: user_profile::{Module, Call, Storage, Event<T>},
+                GeneticTesting: genetic_testing::{Module, Call, Storage, Event<T>},
+                UserProfile: user_profile::{Module, Call, Storage, Event<T>},
 		OctopusAppchain: pallet_octopus_appchain::{Module, Call, Storage, Config<T>, Event<T>, ValidateUnsigned},
 	}
 );

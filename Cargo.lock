@@ -2032,6 +2032,7 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "traits-genetic-testing",
+ "traits-order",
 ]
 
 [[package]]
