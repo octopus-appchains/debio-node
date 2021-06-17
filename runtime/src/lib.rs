@@ -568,7 +568,7 @@ impl frame_system::offchain::AppCrypto<<Signature as Verify>::Signer, Signature>
 }
 
 parameter_types! {
-	pub const AppchainId: pallet_octopus_appchain::ChainId = 10; // TODO: Change this
+	pub const AppchainId: pallet_octopus_appchain::ChainId = 12;
 	pub const Motherchain: pallet_octopus_appchain::MotherchainType = pallet_octopus_appchain::MotherchainType::NEAR;
 	pub const GracePeriod: u32 = 5;
 	pub const UnsignedPriority: u64 = 1 << 20;
