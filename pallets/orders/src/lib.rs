@@ -10,13 +10,14 @@ use sp_std::prelude::*;
 use traits_services::{ServicesProvider, ServiceInfo};
 use traits_genetic_testing::{GeneticTestingProvider, DnaSampleTracking};
 use traits_user_profile::{UserProfileProvider};
+use traits_order::{OrderEventEmitter};
 
 
 #[derive(Encode, Decode, Clone, RuntimeDebug, PartialEq, Eq)]
 pub enum OrderStatus {
     Unpaid,
     Paid,
-    Fulfilled,
+    Success,
     Refunded,
     Cancelled,
 }
@@ -29,6 +30,7 @@ pub struct Order<Hash, AccountId, Moment, EthAddress> {
     pub id: Hash,
     pub service_id: Hash,
     pub customer_id: AccountId,
+    pub customer_box_public_key: Hash,
     pub seller_id: AccountId,
     pub customer_eth_address: EthAddress,
     pub seller_eth_address: EthAddress,
@@ -42,6 +44,7 @@ impl<Hash, AccountId, Moment, EthAddress> Order<Hash, AccountId, Moment, EthAddr
         id: Hash,
         service_id: Hash,
         customer_id: AccountId,
+        customer_box_public_key: Hash,
         seller_id: AccountId,
         customer_eth_address: EthAddress,
         seller_eth_address: EthAddress,
@@ -55,6 +58,7 @@ impl<Hash, AccountId, Moment, EthAddress> Order<Hash, AccountId, Moment, EthAddr
             id,
             service_id,
             customer_id,
+            customer_box_public_key,
             seller_id,
             customer_eth_address,
             seller_eth_address,
@@ -109,7 +113,7 @@ pub mod pallet {
     // ---- Types --------------------------------------------
     type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
     pub type MomentOf<T> = <T as pallet_timestamp::Config>::Moment;
-    type HashOf<T> = <T as frame_system::Config>::Hash;
+    pub type HashOf<T> = <T as frame_system::Config>::Hash;
     type EthereumAddressOf<T> = <T as Config>::EthereumAddress;
     pub type OrderOf<T> = Order<HashOf<T>, AccountIdOf<T>, MomentOf<T>, EthereumAddressOf<T>>;
     type OrderIdsOf<T> = Vec<HashOf<T>>;
@@ -170,15 +174,21 @@ pub mod pallet {
         /// Order paid
         /// parameters, [Order]
         OrderPaid(OrderOf<T>),
-        /// Order Fulfilled
+        /// Order Success
         /// parameters, [Order]
-        OrderFulfilled(OrderOf<T>),
+        OrderSuccess(OrderOf<T>),
         /// Order Refunded
         /// parameters, [Order]
         OrderRefunded(OrderOf<T>),
         /// Order Cancelled
         /// parameters, [Order]
         OrderCancelled(OrderOf<T>),
+        /// Order Not Found
+        /// parameters, []
+        OrderNotFound,
+        /// Order Failed
+        /// parameters, [Order]
+        OrderFailed(OrderOf<T>),
     }
       
 
@@ -211,10 +221,10 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
 
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-        pub fn create_order(origin: OriginFor<T>, service_id: T::Hash) -> DispatchResultWithPostInfo {
+        pub fn create_order(origin: OriginFor<T>, service_id: T::Hash, customer_box_public_key: T::Hash) -> DispatchResultWithPostInfo {
             let who = ensure_signed(origin)?;
 
-            match <Self as OrderInterface<T>>::create_order(&who, &service_id) {
+            match <Self as OrderInterface<T>>::create_order(&who, &service_id, &customer_box_public_key) {
                 Ok(order) => {
                     Self::deposit_event(Event::<T>::OrderCreated(order.clone()));
                     Ok(().into())
@@ -255,7 +265,7 @@ pub mod pallet {
 
             match <Self as OrderInterface<T>>::fulfill_order(&who, &order_id) {
                 Ok(order) => {
-                    Self::deposit_event(Event::<T>::OrderFulfilled(order.clone()));
+                    Self::deposit_event(Event::<T>::OrderSuccess(order.clone()));
                     Ok(().into())
                 },
                 Err(error) => Err(error)?
@@ -281,7 +291,7 @@ impl<T: Config> OrderInterface<T> for Pallet<T> {
     type Order = OrderOf<T>;
     type Error = Error<T>;
 
-    fn create_order(customer_id: &T::AccountId, service_id: &T::Hash) -> Result<Self::Order, Self::Error> {
+    fn create_order(customer_id: &T::AccountId, service_id: &T::Hash, customer_box_public_key: &T::Hash) -> Result<Self::Order, Self::Error> {
         let service = T::Services::service_by_id(service_id);
         if service.is_none() {
             return Err(Error::<T>::ServiceDoesNotExist);
@@ -292,7 +302,7 @@ impl<T: Config> OrderInterface<T> for Pallet<T> {
         let now = pallet_timestamp::Pallet::<T>::get();
 
         // Initialize DnaSample
-        let dna_sample = T::GeneticTesting::create_dna_sample(seller_id, customer_id);
+        let dna_sample = T::GeneticTesting::create_dna_sample(seller_id, customer_id, &order_id);
         if dna_sample.is_err() {
             return Err(Error::<T>::DnaSampleInitalizationError);
         }
@@ -314,6 +324,7 @@ impl<T: Config> OrderInterface<T> for Pallet<T> {
             order_id.clone(),
             service_id.clone(),
             customer_id.clone(),
+            customer_box_public_key.clone(),
             seller_id.clone(),
             customer_eth_address as T::EthereumAddress,
             seller_eth_address as T::EthereumAddress,
@@ -375,7 +386,7 @@ impl<T: Config> OrderInterface<T> for Pallet<T> {
             return Err(Error::<T>::DnaSampleNotSuccessfullyProcessed);
         }
 
-        let order = Self::update_order_status(order_id, OrderStatus::Fulfilled);
+        let order = Self::update_order_status(order_id, OrderStatus::Success);
 
         Ok(order.unwrap())
     }
@@ -502,3 +513,11 @@ impl<T: Config> Pallet<T> {
     }
 }
 
+impl<T: Config> OrderEventEmitter<T> for Pallet<T> {
+    fn emit_event_order_failed(order_id: &HashOf<T>) -> () {
+        match Self::order_by_id(order_id) {
+            None => Self::deposit_event(Event::OrderNotFound),
+            Some(order) => Self::deposit_event(Event::OrderFailed(order))
+        }
+    }
+}
