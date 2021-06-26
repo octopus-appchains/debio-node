@@ -1,15 +1,13 @@
 [package]
-name = "orders"
+name = "certifications"
 version = "0.1.0"
-authors = ["kevin <kevin.janada@gmail.com>"]
+authors = ["agustinustheoo <agustinustheoo@gmail.com>"]
 edition = "2018"
 description = ''
 homepage = ''
 license = 'Unlicense'
-repository = ''
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
 
@@ -21,19 +19,13 @@ package = 'parity-scale-codec'
 version = '2.0.0'
 
 [dependencies]
-serde = { default-features = false, version = "1.0.119", features = ["derive"] }
 frame-support = { default-features = false, version = '3.0.0' }
 frame-system = { default-features = false, version = '3.0.0' }
-pallet-timestamp = { default-features = false, version = '3.0.0' }
 sp-std = { default-features = false, version = '3.0.0' }
-services = { path = '../services', default-features = false }
-traits-services = { path = '../../traits/services', default-features = false }
-traits-genetic-testing = { path = '../../traits/genetic-testing', default-features = false }
-traits-user-profile = { path = '../../traits/user-profile', default-features = false }
-traits-order = { path = '../../traits/order', default-features = false }
-chrono = { default-features = false, version = '0.4' }
+traits-certifications = { path = '../../traits/certifications', default-features = false }
 
 [dev-dependencies]
+serde = { default-features = false, version = "1.0.119" }
 sp-core = { default-features = false, version = '3.0.0' }
 sp-io = { default-features = false, version = '3.0.0' }
 sp-runtime = { default-features = false, version = '3.0.0' }
@@ -41,18 +33,9 @@ sp-runtime = { default-features = false, version = '3.0.0' }
 [features]
 default = ['std']
 std = [
-    'serde/std',
     'codec/std',
     'frame-support/std',
     'frame-system/std',
-    'sp-std/std',
-    'sp-core/std',
     'sp-io/std',
-    'pallet-timestamp/std',
-    'services/std',
-    'chrono/std',
-    'traits-services/std',
-    'traits-genetic-testing/std',
-    'traits-user-profile/std',
-    'traits-order/std',
+    'traits-certifications/std',
 ]

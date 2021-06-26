@@ -27,7 +27,7 @@ pub mod pallet {
     #[pallet::config]
     pub trait Config: frame_system::Config + pallet_timestamp::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-        type RandomnessSource: Randomness<Self::Hash>;
+        type RandomnessSource: Randomness<Self::Hash, BlockNumberFor<Self>>;
         type Orders: OrderEventEmitter<Self>;
     }
 
@@ -576,15 +576,20 @@ impl<T: Config> Pallet<T> {
     }
 
     pub fn add_dna_test_results_by_lab(dna_test_result: &DnaTestResultOf<T>) {
-        match DnaTestResultsByLab::<T>::get(&dna_test_result.owner_id) {
-            None => {
-                let mut tracking_ids = Vec::<Vec<u8>>::new();
-                tracking_ids.push(dna_test_result.tracking_id.clone());
-                DnaTestResultsByLab::<T>::insert(&dna_test_result.owner_id, tracking_ids);
-            },
-            Some(mut tracking_ids) => {
-                tracking_ids.push(dna_test_result.tracking_id.clone());
-                DnaTestResultsByLab::<T>::insert(&dna_test_result.owner_id, tracking_ids);
+        match &dna_test_result.lab_id {
+            None => (),
+            Some(lab_id) => {
+                match DnaTestResultsByLab::<T>::get(&dna_test_result.owner_id) {
+                    None => {
+                        let mut tracking_ids = Vec::<Vec<u8>>::new();
+                        tracking_ids.push(dna_test_result.tracking_id.clone());
+                        DnaTestResultsByLab::<T>::insert(lab_id, tracking_ids);
+                    },
+                    Some(mut tracking_ids) => {
+                        tracking_ids.push(dna_test_result.tracking_id.clone());
+                        DnaTestResultsByLab::<T>::insert(lab_id, tracking_ids);
+                    }
+                }
             }
         }
     }

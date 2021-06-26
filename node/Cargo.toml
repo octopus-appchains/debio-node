@@ -12,62 +12,187 @@ version = '0.1.0'
 [[bin]]
 name = 'debio-node'
 
+[features]
+default = []
+
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
-
-[build-dependencies]
-substrate-build-script-utils = '3.0.0'
 
 [dependencies]
 jsonrpc-core = '15.1.0'
 structopt = '0.3.8'
-hex-literal = "0.2.1"
+hex-literal = "0.3.1"
 
-# Substrate dependencies
-frame-benchmarking = '3.1.0'
-frame-benchmarking-cli = '3.0.0'
-pallet-transaction-payment-rpc = '3.0.0'
-sc-basic-authorship = '0.9.0'
-sc-cli = { features = ['wasmtime'], version = '0.9.0' }
-sc-client-api = '3.0.0'
-sc-consensus = '0.9.0'
-sc-consensus-babe = '0.9.0'
-sc-executor = { features = ['wasmtime'], version = '0.9.0' }
-sc-finality-grandpa = '0.9.0'
-sc-keystore = '3.0.0'
-sc-rpc = '3.0.0'
-sc-rpc-api = '0.9.0'
-sc-service = { features = ['wasmtime'], version = '0.9.0' }
-sc-telemetry = '3.0.0'
-sc-transaction-pool = '3.0.0'
-sp-api = '3.0.0'
-sp-block-builder = '3.0.0'
-sp-blockchain = '3.0.0'
-sp-consensus = '0.9.0'
-sp-consensus-babe = '0.9.0'
-sp-core = '3.0.0'
-sp-finality-grandpa = '3.0.0'
-sp-inherents = '3.0.0'
-sp-runtime = '3.0.0'
-sp-transaction-pool = '3.0.0'
-substrate-frame-rpc-system = '3.0.0'
+rand = "0.7.2"
 
-pallet-im-online = '3.0.0'
-pallet-staking = '3.0.0'
-sp-keystore = '0.9.0'
-sc-consensus-babe-rpc = '0.9.0'
-sc-consensus-epochs = '0.9.0'
-sc-finality-grandpa-rpc = '0.9.0'
-sc-network = '0.9.0'
-sc-consensus-slots = '0.9.0'
-sc-chain-spec = '3.0.0'
-sc-sync-state-rpc = '0.9.0'
+sc-chain-spec = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git" }
+sc-consensus-babe-rpc = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-consensus-epochs = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-consensus-slots = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-consensus-uncles = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-finality-grandpa-rpc = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-network = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sc-sync-state-rpc = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+sp-authorship = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git" }
+sp-keystore = { version = "0.9.0", git = "https://github.com/paritytech/substrate.git" }
+pallet-im-online = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git" }
+pallet-mmr-rpc = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git" }
+pallet-staking = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git" }
 
-# local dependencies
-node-template-runtime = { path = '../runtime', version = '3.0.0' }
+beefy-gadget = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus" }
+beefy-gadget-rpc = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus" }
+beefy-primitives = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus" }
 
-pallet-octopus-appchain = { git = 'https://github.com/octopus-network/pallet-octopus-appchain.git' }
+pallet-octopus-appchain = { git = "https://github.com/octopus-network/pallet-octopus-appchain", branch = "master" }
 
-[features]
-default = []
-runtime-benchmarks = ['node-template-runtime/runtime-benchmarks']
+[dependencies.frame-benchmarking]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.1.0'
+
+[dependencies.frame-benchmarking-cli]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.debio-runtime]
+path = '../runtime'
+version = '0.1.0'
+
+[dependencies.pallet-transaction-payment-rpc]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sc-basic-authorship]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-cli]
+features = ['wasmtime']
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-client-api]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sc-consensus]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-consensus-babe]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-executor]
+features = ['wasmtime']
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-finality-grandpa]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-keystore]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sc-rpc]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sc-rpc-api]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-service]
+features = ['wasmtime']
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sc-telemetry]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sc-transaction-pool]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-api]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-block-builder]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-blockchain]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-consensus]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sp-consensus-babe]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '0.9.0'
+
+[dependencies.sp-core]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-finality-grandpa]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-inherents]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-runtime]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-timestamp]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.sp-transaction-pool]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
+[dependencies.substrate-frame-rpc-system]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+[build-dependencies.substrate-build-script-utils]
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'd6c33e7ec313f9bd5e319dc0a5a3ace5543f9617'
+version = '3.0.0'
+
